@@ -29,6 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return
     }
     
+    // runs promises together
     let [
       twitchGlobalBadges, twitchChannelBadges,
       bttvGlobalEmotes, bttvChannelEmotes,
