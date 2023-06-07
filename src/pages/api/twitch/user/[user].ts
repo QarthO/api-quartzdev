@@ -21,6 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     let rawUserData = await apiTwitch.fetchUserData(username)
 
+    if(!rawUserData) {
+      res.status(401).json('Unauthorized - Try again')
+      return
+    }
+
     let twitchData = rawUserData.data[0]
     
     // checks if user exists

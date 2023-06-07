@@ -37,7 +37,7 @@ export async function fetchChannelEmotes(twitchID: string) {
         }
         // resolves promise with cached emotes - cache can be empty if never fetched
         console.log('ffz: Failed to fetch global emotes - Using cache instead')
-        reject(channelEmotes)
+        resolve(channelEmotes)
     })
     
 }

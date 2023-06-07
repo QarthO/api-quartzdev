@@ -37,7 +37,7 @@ type twitchBadgeData = {
     }
 }
 
-async function fetchNewToken(): Promise<fetchToken> {
+async function fetchNewToken(): Promise<fetchToken | null> {
 
     console.log('Fetching new token...')
     
@@ -52,8 +52,11 @@ async function fetchNewToken(): Promise<fetchToken> {
     // returns promise
     return new Promise((resolve, reject) => {
         // if POST ok returns 
-        if(res.ok) resolve(res.json())
-        reject(res.statusText)
+        if(res.ok) {
+            resolve(res.json())
+            return
+        }
+        resolve(null)
     })
 
 }
@@ -65,7 +68,7 @@ async function checkToken() {
     let now = new Date()
    
     // if now is before expiration date
-    if(now <= expireDate) {
+    if(oauthToken && now <= expireDate) {
         let remainingMs = Math.abs(expireDate.getTime() - now.getTime());
         console.log(`Twitch API oauth token still valid for ${new Date(remainingMs).toISOString().slice(11, 19)}m`)
         return
@@ -73,6 +76,8 @@ async function checkToken() {
 
     // fetches new oauth token from twitch
     let fetchTokenData = await fetchNewToken()
+
+    if(!fetchTokenData) return null
 
     // updates new expiration date
     expireDate = new Date(now.getTime() + fetchTokenData.expires_in)
@@ -86,10 +91,12 @@ async function checkToken() {
     
 }
 
-export async function fetchUserData(username: String): Promise<fetchData> {
+export async function fetchUserData(username: String): Promise<fetchData | null > {
 
     // updates token if needed
     await checkToken()
+
+    if(!checkToken()) return null
 
     // twitch api url to fetch user info
     let userUrl = `https://api.twitch.tv/helix/users?login=${username}`
@@ -109,7 +116,7 @@ export async function fetchUserData(username: String): Promise<fetchData> {
         if(res.ok) {
             resolve(res.json())
         }
-        reject(res.statusText)
+        resolve(null)
     })
 }
 
