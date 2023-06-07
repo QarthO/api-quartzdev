@@ -18,7 +18,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
+            Hosted w/{' '}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
@@ -32,14 +32,7 @@ export default function Home() {
       </div>
 
       <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+        <h1 className={`${styles.card} ${styles.code}`}>quartzdev.gg</h1>
       </div>
 
       <div className={styles.grid}>
