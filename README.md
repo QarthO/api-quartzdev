@@ -21,5 +21,7 @@ Example:
 
 ```GET api.quartzdev.gg/twitch/user/qartho```
 
+View on the web: [api.quartzdev.gg/twitch/user/qartho](https://api.quartzdev.gg/twitch/user/qartho)
+
 ![image](https://github.com/QarthO/api-quartzdev/assets/10179096/268ca848-e069-4552-a8bb-d5f864cb3e96)
 
