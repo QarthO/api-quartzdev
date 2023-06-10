@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let rawUserData = await apiTwitch.fetchUserData(username)
 
     if(!rawUserData) {
-      res.status(401).json('Unauthorized - Try again')
+      res.status(401).json(`Unauthorized - Try again: ${process.env.TWITCH_CLIENT_ID}`)
       return
     }
 
