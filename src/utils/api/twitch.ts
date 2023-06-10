@@ -123,10 +123,22 @@ export async function fetchUserData(username: String): Promise<fetchData | null 
 var globalBadgesCache = {}
 
 export async function fetchGlobalBadges() {
-    
-    let url = `https://badges.twitch.tv/v1/badges/global/display`
 
-    const res = await fetch(url)
+    // updates token if needed
+    await checkToken()
+
+    if(!checkToken()) return null
+    
+    let url = `https://api.twitch.tv/helix/chat/badges/global`
+
+    const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${oauthToken}`,
+            'Content-Type': 'application/json',
+            'client-id': `${TWITCH_CLIENT_ID}`
+        }
+    })
 
     return new Promise(async (resolve, reject) => {
         
@@ -156,10 +168,17 @@ export async function fetchGlobalBadges() {
 
 export async function fetchChannelBadges(twitchID: string) {
     // twitch api url for channel specific badges
-    let url = `https://badges.twitch.tv/v1/badges/channels/${twitchID}/display?language=en`
+    let url = `https://api.twitch.tv/helix/chat/badges?broadcaster_id=${twitchID}`
 
     // fetches channel badges
-    const res = await fetch(url)
+    const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${oauthToken}`,
+            'Content-Type': 'application/json',
+            'client-id': `${TWITCH_CLIENT_ID}`
+        }
+    })
 
     return new Promise(async (resolve, reject) => {
 
