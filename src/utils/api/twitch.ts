@@ -1,6 +1,6 @@
 
-const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID
-const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET
+const TWITCH_CLIENT_ID = process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID
+const TWITCH_CLIENT_SECRET = process.env.NEXT_PUBLIC_TWITCH_CLIENT_SECRET
 const tokenURL = `https://id.twitch.tv/oauth2/token?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`
 
 // twitch oauth token expires 80-90min after retrieval
