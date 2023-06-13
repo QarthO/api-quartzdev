@@ -31,10 +31,13 @@ type fetchData = {
     data: [twitchData]
 }
 
+type twitchBadgeSet = {
+    set_id: string
+    versions: [object]
+}
+
 type twitchBadgeData = {
-    badge_sets: {
-        [badge_set: string]: object 
-    }
+    data: [twitchBadgeSet]
 }
 
 async function fetchNewToken(): Promise<fetchToken | null> {
@@ -123,6 +126,7 @@ export async function fetchUserData(username: String): Promise<fetchData | null 
 var globalBadgesCache = {}
 
 export async function fetchGlobalBadges() {
+    console.log(oauthToken)
 
     // updates token if needed
     await checkToken()
@@ -150,10 +154,11 @@ export async function fetchGlobalBadges() {
             let data = (await res.json()) as twitchBadgeData
 
             // maps data
-            globalBadgesCache = data.badge_sets
+            globalBadgesCache = data.data
 
             // resolves promise with global badges
-            resolve(globalBadgesCache)
+            // resolve({globalBadgesCache})
+            resolve({})
             return
         }
         
@@ -189,10 +194,11 @@ export async function fetchChannelBadges(twitchID: string) {
             let data = (await res.json()) as twitchBadgeData
 
             // maps data
-            channelBadges = data.badge_sets
+            channelBadges = data.data
 
             // resolves promise with channel badges
-            resolve(channelBadges)
+            // resolve(channelBadges)
+            resolve({})
             return
         }
         // resolves promise
