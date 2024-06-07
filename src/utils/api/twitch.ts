@@ -194,7 +194,7 @@ export async function fetchChannelBadges(twitchID: string) {
             let data = (await res.json()) as twitchBadgeData
 
             // maps data
-            // channelBadges = data.data // <----------- twichat needs to update to read this new format
+            channelBadges = data.data
 
             // resolves promise with channel badges
             resolve(channelBadges) // <-------------- is empty until twichat is updated
