@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 type apiResponseData = {
   username: string;
-  id: number | null;
+  id: string | null;
 };
 
 type DiscordUser = {
@@ -93,7 +93,7 @@ async function fetchUserId(usernameToFind: String) {
 
     let response: apiResponseData = {
       username: member.user.username,
-      id: Number(member.user.id),
+      id: member.user.id,
     };
     resolve(response);
   });
