@@ -54,47 +54,81 @@ export default async function handler(
   res.status(200).json(rawUserData);
 }
 
-const DISCORD_BOT_API_TOKEN = process.env.NEXT_PUBLIC_DISCORD_BOT_TOKEN;
+const GUILD_ID = "1022551403941613661";
+const url = `https://discord.com/api/v10/guilds/${GUILD_ID}/members?limit=1000`;
+const API_TOKEN = process.env.NEXT_PUBLIC_DISCORD_BOT_TOKEN;
 
 async function fetchUserId(usernameToFind: String) {
-  const GUILD_ID = "1022551403941613661"; // Replace with your server's ID
-  const url = `https://discord.com/api/v10/guilds/${GUILD_ID}/members?limit=1000`;
-  const BOT_TOKEN = DISCORD_BOT_API_TOKEN;
-
   // fetch global emotes
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: `Bot ${BOT_TOKEN}`,
-    },
-  });
+  //
 
   // returns promise
   return new Promise(async (resolve, reject) => {
-    let data = {};
-
-    // if fetech successful
-    if (res.ok) {
-      // types incoming data
-      let data = (await res.json()) as DiscordUser[];
-
-      const member = data.find(
-        (user) =>
-          user.user &&
-          user.user.username &&
-          user.user.username.toString().toLowerCase() ===
-            usernameToFind.toString().toLowerCase(),
-      );
-
-      if (member) {
-        let response: apiResponseData = {
-          username: member.user.username,
-          id: Number(member.user.id),
-        };
-        resolve(response);
-      } else {
-        resolve(null);
-      }
+    let res = await alwaysFetch();
+    if (res == null) {
+      resolve(null);
+      return;
     }
+    // if fetech successful
+    if (!res.ok) {
+      resolve(null);
+      return;
+    }
+
+    // types incoming data
+    let data = (await res.json()) as DiscordUser[];
+
+    const member = data.find(
+      (user) =>
+        user.user &&
+        user.user.username &&
+        user.user.username.toString().toLowerCase() ===
+          usernameToFind.toString().toLowerCase(),
+    );
+
+    if (!member) {
+      resolve(null);
+      return;
+    }
+
+    let response: apiResponseData = {
+      username: member.user.username,
+      id: Number(member.user.id),
+    };
+    resolve(response);
   });
+}
+
+async function alwaysFetch() {
+  try {
+    return fetchWithTimeout(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bot ${API_TOKEN}`,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit = {},
+  timeout: number = 5000, // Timeout in milliseconds
+): Promise<Response | null> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  options.signal = controller.signal;
+
+  try {
+    const response = await fetch(url, options);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return null;
+  } finally {
+    clearTimeout(id); // Cleanup the timeout
+  }
 }
