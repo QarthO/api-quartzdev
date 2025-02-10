@@ -56,7 +56,7 @@ export default async function handler(
 
 const GUILD_ID = "1022551403941613661";
 const url = `https://discord.com/api/v10/guilds/${GUILD_ID}/members?limit=1000`;
-const API_TOKEN = process.env.NEXT_PUBLIC_DISCORD_BOT_TOKEN;
+const API_TOKEN = process.env.NEXT_PRIVATE_DISCORD_BOT_TOKEN;
 
 async function fetchUserId(usernameToFind: String) {
   // fetch global emotes
